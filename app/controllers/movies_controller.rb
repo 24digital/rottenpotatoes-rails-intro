@@ -12,8 +12,19 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
+
   def index
-    @movies = Movie.all
+@act =  params[:id]
+puts @act
+  if @act =="title_header"
+   
+     @movies = Movie.all.order(:title)
+   
+   puts @movies
+else
+      @movies = Movie.all
+    end
+    
   end
 
   def new
