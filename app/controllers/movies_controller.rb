@@ -15,12 +15,14 @@ class MoviesController < ApplicationController
 
   def index
 @act =  params[:id]
-puts @act
+
   if @act =="title_header"
    
      @movies = Movie.all.order(:title)
    
-   puts @movies
+elsif 
+  @act =="release_date_header"
+  @movies = Movie.all.order(:release_date, dsc)
 else
       @movies = Movie.all
     end
