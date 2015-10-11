@@ -14,22 +14,26 @@ class MoviesController < ApplicationController
 
 
   def index
-@act =  params[:sort]
-@release = params[:release]
-
-  if @act =="title"
-    @movies = Movie.where(params[:sort])
- 
-    
-   
-elsif 
-  @act =="release_date"
-  @movies = Movie.order(:release_date)
-else
-      @movies = Movie.all
-    end
-    
+  if params[:sort]
+      session[:sort] = params[:sort]
   end
+
+  if params[:ratings]
+    session[:ratings] = params[:ratings]
+  else
+    if session[:ratings]
+      redirect_to movies_path(Hash[session[:ratings].map { |k, v| ["ratings[#{k}]", v]}])
+    else
+      session[:ratings] = Hash[Movie.all_ratings.map {|r| [r, 1]}]
+    end
+  end
+
+  @movies = Movie.all
+  @movies = Movie.order session[:sort]
+  @movies = @movies.where(rating: session[:ratings].keys)
+  @all_ratings = Movie.all_ratings
+  end
+
 
   def new
     # default: render 'new' template
